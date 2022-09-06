@@ -7,30 +7,29 @@ from tableauhyperapi import escape_string_literal
 import tableauserverclient as TSC
 import uuid
 
-with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU, 'datamin' ) as hyper:
-    def create_app(test_config=None):
-        # create and configure the app
-        app = Flask(__name__, instance_relative_config=True)
-        app.config.from_mapping(
-            SECRET_KEY='dev',
-        )
+def create_app(test_config=None):
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+    )
 
-        if test_config is None:
-            # load the instance config, if it exists, when not testing
-            app.config.from_pyfile('config.py', silent=True)
-        else:
-            # load the test config if passed in
-            app.config.from_mapping(test_config)
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
 
-        # ensure the instance folder exists
-        try:
-            os.makedirs(app.instance_path)
-        except OSError:
-            pass
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
-        @app.route('/private/tableau/insert', methods=["POST"])
-        def insertRowsIntoTableau():
-
+    @app.route('/private/tableau/insert', methods=["POST"])
+    def insertRowsIntoTableau():
+        with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU, 'datamin' ) as hyper:
             input = json.loads(request.get_data())
             columns = []
             for col in input["table"]["columns"]:
@@ -100,23 +99,23 @@ with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU, 'datamin' ) as hy
                     return "", 200
             return
 
-        return app
+    return app
 
-    def sqlTypeFromString(typeStr):
-        types = {
-            "int": SqlType.int(),
-            "varchar": SqlType.varchar(255),
-            "double": SqlType.double(),
-            "timestamp": SqlType.timestamp(),
-        }
+def sqlTypeFromString(typeStr):
+    types = {
+        "int": SqlType.int(),
+        "varchar": SqlType.varchar(255),
+        "double": SqlType.double(),
+        "timestamp": SqlType.timestamp(),
+    }
 
-        return types[typeStr]
+    return types[typeStr]
 
-    def tableauMode(mode):
-        types = {
-            "append": "Append",
-            "overwrite": "Overwrite",
-            "create_new": "CreateNew",
-        }
+def tableauMode(mode):
+    types = {
+        "append": "Append",
+        "overwrite": "Overwrite",
+        "create_new": "CreateNew",
+    }
 
-        return types[mode]
+    return types[mode]
