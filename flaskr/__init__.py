@@ -37,7 +37,7 @@ with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU, 'datamin' ) as hy
                 columns.append(TableDefinition.Column(col["name"], sqlTypeFromString(col["type"])))
 
 
-            PATH_TO_HYPER = '/tmp/'+uuid.uuid4()+'.hyper'
+            PATH_TO_HYPER = '/tmp/'+str(uuid.uuid4())+'.hyper'
 
             # Step 1: Start a new private local Hyper instance
             
