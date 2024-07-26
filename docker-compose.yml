@@ -1,0 +1,21 @@
+services:
+  datamin_tableau_http_wrapper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: datamin_tableau_http_wrapper
+    #networks:
+    #  - ylem_network
+    ports:
+      - "7890:5000"
+    volumes:
+      - .:/opt/ylem_python_processor
+    working_dir: /opt/ylem_python_processor
+    stdin_open: true
+    tty: true
+
+# uncomment if you want to include the container to the existing network
+#networks:
+#  default:
+#    name: ylem_network
+#    external: true

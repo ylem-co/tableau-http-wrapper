@@ -12,3 +12,5 @@ Containerized HTTP wrapper to send streaming data from Datamin to Tableau.
 ```shell
 docker compose up
 ```
+
+The wrapper is available on http://127.0.0.1:7890
