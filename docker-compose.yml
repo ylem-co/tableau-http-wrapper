@@ -1,9 +1,9 @@
 services:
-  datamin_tableau_http_wrapper:
+  ylem_tableau_http_wrapper:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: datamin_tableau_http_wrapper
+    container_name: ylem_tableau_http_wrapper
     #networks:
     #  - ylem_network
     ports:
